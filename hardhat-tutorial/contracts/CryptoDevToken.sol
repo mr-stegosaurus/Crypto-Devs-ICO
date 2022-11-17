@@ -33,7 +33,7 @@ contract CryptoDevToken is ERC20, Ownable {
     function mint(uint256 amount) public payable {
         // the value of ether that should be equal or greater than tokenPrice * amount;
         uint256 _requiredAmount = tokenPrice * amount;
-        require(msg.value >= _requiredAmount, "Ether sent is incorrect")
+        require(msg.value >= _requiredAmount, "Ether sent is incorrect");
         // total tokens + amount <= 10000, otherwise revert the transaction
         uint256 amountWithDecimals = amount * 10**18;
         require(
@@ -82,7 +82,7 @@ contract CryptoDevToken is ERC20, Ownable {
     function withdraw() public onlyOwner() {
         address _owner = owner();
         uint256 amount = address(this).balance;
-        (bool sent, ) = _owner.call(value: amount)("");
+        (bool sent, ) = _owner.call{value: amount}("");
         require(sent, 'failed to send ether');
     }
 
