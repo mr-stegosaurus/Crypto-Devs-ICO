@@ -14,7 +14,7 @@ async function main() {
   );
   
   //deploy the contract
-  const deployedCryptoDevsTokenContract.deploy(
+  const deployedCryptoDevsTokenContract = await cryptoDevsTokenContract.deploy(
     cryptoDevsNFTContract
   );
 
