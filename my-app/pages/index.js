@@ -9,7 +9,7 @@ import {
   TOKEN_CONTRACT_ABI,
   TOKEN_CONTRACT_ADDRESS,
 } from "../constants";
-import styles from "../styles/Home.mdoule.css";
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
   // Create a BigNumber `0`
