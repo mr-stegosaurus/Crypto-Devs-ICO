@@ -309,7 +309,7 @@ export default function Home() {
       getTotalTokensMinted();
       getBalanceOfCryptoDevTokens();
       getTokensToBeClaimed();
-      withdrawCoins();
+      getOwner();
     }
   }, [walletConnected]);
 
@@ -396,6 +396,7 @@ export default function Home() {
                 {/* Format Ether helps us in converting a BigNumber to string */}
                 Overall {utils.formatEther(tokensMinted)}/10000 have been minted!!!
               </div>
+              {renderButton()}
               {renderButton()}
             </div>
           ) : (
