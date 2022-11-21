@@ -21,6 +21,8 @@ export default function Home() {
   // tokensToBeClaimed keeps track of the number of tokens that can be claimed
   // based on the Crypto Dev NFT's held by the user for which they havent claimed the tokens
   const [tokensToBeClaimed, setTokensToBeClaimed] = useState(zero);
+  // contractBalance checks the balance stored in the ICO contract
+  const [contractBalance , setContractBalance] = useState(zero);
   // balanceOfCryptoDevTokens keeps track of number of Crypto Dev tokens owned by an address
   const [balanceOfCryptoDevTokens, setBalanceOfCryptoDevTokens] =
     useState(zero);
@@ -86,6 +88,36 @@ export default function Home() {
   };
 
   /**
+   * set contract balance: checks ETH balance of contract
+   */
+  const getContractBalance= async () => {
+  try {
+    // Get the provider from web3Modal, which in our case is MetaMask
+    // No need for the Signer here, as we are only reading state from the blockchain
+    const provider = await getProviderOrSigner();
+    // Create an instance of tokenContract
+    const tokenContract = new Contract(
+      TOKEN_CONTRACT_ADDRESS,
+      TOKEN_CONTRACT_ABI,
+      provider
+    );
+    // call the getBalance function to get contract balance
+    const balance = await provider.getBalance(TOKEN_CONTRACT_ADDRESS);
+    // balance is a Big number and thus we would compare it with Big number `zero`
+    if (balance === zero) {
+      setContractBalance(zero);
+    } else {
+      //contractBalance has been initialized to a Big Number, thus we would convert amount
+      // to a big number and then set its value
+      setContractBalance(balance);
+    }
+  } catch (err) {
+    console.error(err);
+    setContractBalance(zero);
+  }
+};
+
+  /**
    * getBalanceOfCryptoDevTokens: checks the balance of Crypto Dev Tokens's held by an address
    */
   const getBalanceOfCryptoDevTokens = async () => {
@@ -142,6 +174,7 @@ export default function Home() {
       await getBalanceOfCryptoDevTokens();
       await getTotalTokensMinted();
       await getTokensToBeClaimed();
+      await getContractBalance();
     } catch (err) {
       console.error(err);
     }
@@ -241,6 +274,7 @@ export default function Home() {
       await tx.wait();
       setLoading(false);
       await getOwner();
+      await getContractBalance();
     } catch (err) {
       console.error(err);
     }
@@ -310,6 +344,7 @@ export default function Home() {
       getBalanceOfCryptoDevTokens();
       getTokensToBeClaimed();
       getOwner();
+      getContractBalance();
     }
   }, [walletConnected]);
 
@@ -376,7 +411,7 @@ export default function Home() {
       return (
         <div>
           <div className={styles.description}>
-          Contract holds {address(this).balance} ether to withdraw!
+          Contract holds {utils.formatEther(contractBalance)} ether to withdraw!
           </div>
           <button className={styles.button1} onClick={withdrawCoins}>
             Withdraw Coins
