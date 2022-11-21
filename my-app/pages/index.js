@@ -364,19 +364,26 @@ export default function Home() {
   };
 
   const renderWithdrawButton = () => {
-        // if owner is connected, withdrawCoins() is called
-        if (walletConnected && isOwner) {
-          return (
-            <div>
-              <div className={styles.description}>
-             Contract holds X ether to withdraw!
-              </div>
-              <button className={styles.button1} onClick={withdrawCoins}>
-                Withdraw Coins
-              </button>
-            </div>
-          );
-        };
+    if (loading) {
+      return (
+        <div>
+          <button className={styles.button}>Loading...</button>
+        </div>
+      );
+    }
+    // if owner is connected, withdrawCoins() is called
+    if (walletConnected && isOwner) {
+      return (
+        <div>
+          <div className={styles.description}>
+          Contract holds {address(this).balance} ether to withdraw!
+          </div>
+          <button className={styles.button1} onClick={withdrawCoins}>
+            Withdraw Coins
+          </button>
+        </div>
+      );
+    };
   };
 
   return (
