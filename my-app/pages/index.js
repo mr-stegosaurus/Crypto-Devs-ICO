@@ -325,16 +325,7 @@ export default function Home() {
         </div>
       );
     }
-    // if owner is connected, withdrawCoins() is called
-    if (walletConnected && isOwner) {
-      return (
-        <div>
-          <button className={styles.button1} onClick={withdrawCoins}>
-            Withdraw Coins
-          </button>
-        </div>
-      );
-    }
+
     // If tokens to be claimed are greater than 0, Return a claim button
     if (tokensToBeClaimed > 0) {
       return (
@@ -372,6 +363,22 @@ export default function Home() {
     );
   };
 
+  const renderWithdrawButton = () => {
+        // if owner is connected, withdrawCoins() is called
+        if (walletConnected && isOwner) {
+          return (
+            <div>
+              <div className={styles.description}>
+             Contract holds X ether to withdraw!
+              </div>
+              <button className={styles.button1} onClick={withdrawCoins}>
+                Withdraw Coins
+              </button>
+            </div>
+          );
+        };
+  };
+
   return (
     <div>
       <Head>
@@ -397,7 +404,7 @@ export default function Home() {
                 Overall {utils.formatEther(tokensMinted)}/10000 have been minted!!!
               </div>
               {renderButton()}
-              {renderButton()}
+              {renderWithdrawButton()}
             </div>
           ) : (
             <button onClick={connectWallet} className={styles.button}>
